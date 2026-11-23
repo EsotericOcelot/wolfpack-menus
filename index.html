@@ -22,16 +22,22 @@
         <p class="lede">Search this week’s published offerings across Fountain, Case, Clark, and One Earth.</p>
       </div>
       <details class="weekly-status"><summary id="status-summary">Menu status</summary>
+      <div class="status-details">
       <div id="freshness-card" class="freshness-card" aria-live="polite">
         <span class="status-dot loading-dot"></span>
         <div><strong>Loading weekly menu</strong><span>Please wait…</span></div>
       </div>
         <section id="publication-banner" class="banner hidden" aria-live="polite"></section>
+      </div>
       </details>
     </div>
   </header>
 
   <main class="page-shell">
+    <label class="field food-search-field">
+      <span>Food name</span>
+      <input id="food-search" type="search" placeholder="Search foods" autocomplete="off">
+    </label>
     <nav class="hall-toolbar" aria-label="Menu filters">
       <label class="toolbar-field toolbar-date">
         <span>Date</span>
@@ -50,7 +56,6 @@
       </a>
       <div class="browse-actions">
       <button id="advanced-toggle" class="advanced-toggle" type="button" aria-expanded="false" aria-controls="advanced-filters">Advanced filters</button>
-      <input id="food-search" type="search" placeholder="Search foods" aria-label="Search foods" autocomplete="off">
       <div class="view-tabs" role="tablist" aria-label="Menu view">
         <button id="browse-tab" class="view-tab" type="button" role="tab" aria-selected="true" aria-controls="browse-view">Browse</button>
         <button id="compare-tab" class="view-tab" type="button" role="tab" aria-selected="false" aria-controls="compare-view" tabindex="-1">Compare</button>
