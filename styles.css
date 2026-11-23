@@ -381,6 +381,7 @@ legend { padding: 0; }
   box-shadow: var(--shadow);
 }
 .comparison-scroll:focus-visible { outline: 3px solid rgba(181,31,46,.25); outline-offset: 2px; }
+.comparison-scroll { border-top: 0; border-radius: 0 0 var(--radius) var(--radius); }
 .comparison-board { width: var(--compare-min-width); min-width: 100%; }
 .compare-columns-1 { --compare-columns: 1; --compare-min-width: 280px; }
 .compare-columns-2 { --compare-columns: 2; --compare-min-width: 560px; }
@@ -571,7 +572,7 @@ footer p { margin: 0; }
   position: sticky; top: var(--toolbar-bottom, 120px); z-index: 3;
   background: var(--paper); padding-block: 5px;
 }
-.compare-key { padding: 0; }
+.compare-key { padding: 0; border: 1px solid var(--line); border-bottom: 0; border-radius: var(--radius) var(--radius) 0 0; overflow: clip; }
 .key-clip { overflow: hidden; }
 .compare-key .compare-hall-heading { padding: 5px 10px; }
 .active-category { background: var(--soft-red); padding-inline: 10px; font-weight: 750; font-size: .85rem; }
