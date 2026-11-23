@@ -112,6 +112,10 @@ export function initialDate(window, now = new Date(), occurrences = []) {
 }
 
 export function dateOptionLabel(value, window, now = new Date(), nextAvailableDate = window?.start) {
+  if (value === "all") {
+    const style = { month: "short", day: "numeric", year: "numeric" };
+    return `All week · ${formatDate(window.start, style)} – ${formatDate(window.end, style)}`;
+  }
   const today = easternDate(now);
   const inWindow = window?.start <= today && today <= window?.end;
   const formatted = formatDate(value);
@@ -475,6 +479,8 @@ function renderCompare(data, state) {
 }
 
 function renderResults(data, state) {
+  document.querySelector("#results-heading").textContent = state.date === "all"
+    ? dateOptionLabel("all", data.window) : "Weekly results";
   const results = document.querySelector("#results");
   const count = document.querySelector("#result-count");
   const filtered = filterOccurrences(data.occurrences, state);
@@ -609,7 +615,7 @@ export function createInitialState(data, now = new Date()) {
 
 function renderDateOptions(data, state, now) {
   const dates = inclusiveWindowDates(data.window);
-  document.querySelector("#date-select").innerHTML = dates
+  document.querySelector("#date-select").innerHTML = ["all", ...dates]
     .map(date => `<option value="${date}">${escapeHtml(dateOptionLabel(date, data.window, now, state.date))}</option>`).join("");
   document.querySelector("#date-select").value = state.date;
 }
