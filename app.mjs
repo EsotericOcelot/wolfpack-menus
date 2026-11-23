@@ -462,7 +462,7 @@ function renderCompare(data, state) {
   results.innerHTML = `
     <div class="compare-context"><strong>${escapeHtml(formatDate(state.date))} · ${escapeHtml(meal)}</strong><span>Categories align across the selected dining halls. Original station names remain inside each column.</span></div>
     <p class="compare-scroll-cue">Scroll sideways to compare more dining halls <span aria-hidden="true">→</span></p>
-    <div class="compare-key"><div class="active-category"></div><div class="key-clip"><div class="comparison-board ${columnClass}"><div class="compare-hall-row">${header}</div></div></div></div>
+    <div class="compare-key"><div class="active-category" aria-hidden="true"><span></span></div><div class="key-clip"><div class="comparison-board ${columnClass}"><div class="compare-hall-row">${header}</div></div></div></div>
     <div class="comparison-scroll" tabindex="0" aria-label="Dining hall comparison table">
       <div class="comparison-board ${columnClass}">
         ${sections}
@@ -674,7 +674,9 @@ function bindFilters(data, state, nowProvider) {
     const active = sections.find(section => section.getBoundingClientRect().bottom > edge);
     const label = active && active.querySelector("h3").getBoundingClientRect().bottom <= edge
       ? active.dataset.category : "";
-    if (key.firstElementChild.textContent !== label) key.firstElementChild.textContent = label;
+    const badge = key.firstElementChild;
+    if (label && badge.textContent !== label) badge.firstElementChild.textContent = label;
+    badge.classList.toggle("is-visible", Boolean(label));
   }
   new ResizeObserver(updateOffset).observe(toolbar);
   window.addEventListener("scroll", updateCategory, {passive: true});
