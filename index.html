@@ -21,37 +21,17 @@
         <h1>Find what’s on the menu.</h1>
         <p class="lede">Search this week’s published offerings across Fountain, Case, Clark, and One Earth.</p>
       </div>
+      <details class="weekly-status"><summary id="status-summary">Menu status</summary>
       <div id="freshness-card" class="freshness-card" aria-live="polite">
         <span class="status-dot loading-dot"></span>
         <div><strong>Loading weekly menu</strong><span>Please wait…</span></div>
       </div>
+        <section id="publication-banner" class="banner hidden" aria-live="polite"></section>
+      </details>
     </div>
   </header>
 
   <main class="page-shell">
-    <section id="publication-banner" class="banner hidden" aria-live="polite"></section>
-
-    <section class="filter-panel" aria-labelledby="filter-heading">
-      <div class="filter-heading-row">
-        <div>
-          <p class="section-kicker">Search scope</p>
-          <h2 id="filter-heading">What are you looking for?</h2>
-        </div>
-        <button id="reset-filters" class="text-button" type="button">Reset filters</button>
-      </div>
-
-      <div class="primary-filters search-only">
-        <label class="field search-field">
-          <span>Food name</span>
-          <span class="input-wrap">
-            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
-            <input id="food-search" type="search" placeholder="Try pasta, chicken, apples…" autocomplete="off">
-          </span>
-        </label>
-
-      </div>
-    </section>
-
     <nav class="hall-toolbar" aria-label="Menu filters">
       <label class="toolbar-field toolbar-date">
         <span>Date</span>
@@ -68,7 +48,14 @@
       <a class="back-to-top" href="#page-top" aria-label="Back to top" title="Back to top">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>
       </a>
+      <div class="browse-actions">
       <button id="advanced-toggle" class="advanced-toggle" type="button" aria-expanded="false" aria-controls="advanced-filters">Advanced filters</button>
+      <input id="food-search" type="search" placeholder="Search foods" aria-label="Search foods" autocomplete="off">
+      <div class="view-tabs" role="tablist" aria-label="Menu view">
+        <button id="browse-tab" class="view-tab" type="button" role="tab" aria-selected="true" aria-controls="browse-view">Browse</button>
+        <button id="compare-tab" class="view-tab" type="button" role="tab" aria-selected="false" aria-controls="compare-view" tabindex="-1">Compare</button>
+      </div>
+      </div>
       <small id="advanced-summary" hidden></small>
     </nav>
 
@@ -99,10 +86,6 @@
     </section>
 
     <section class="results-section" aria-label="Menu results">
-      <div class="view-tabs" role="tablist" aria-label="Menu view">
-        <button id="browse-tab" class="view-tab" type="button" role="tab" aria-selected="true" aria-controls="browse-view">Browse</button>
-        <button id="compare-tab" class="view-tab" type="button" role="tab" aria-selected="false" aria-controls="compare-view" tabindex="-1">Compare</button>
-      </div>
       <div id="browse-view" role="tabpanel" aria-labelledby="browse-tab">
       <div class="results-heading-row">
         <div>
@@ -110,6 +93,7 @@
           <h2 id="results-heading">Weekly results</h2>
         </div>
         <div class="results-meta">
+          <button id="reset-filters" class="text-button" type="button">Reset filters</button>
           <p id="result-count" class="result-count" aria-live="polite"></p>
           <a id="coverage-jump" class="coverage-jump hidden" href="#coverage-notices">Availability notes <span id="coverage-jump-count"></span></a>
         </div>

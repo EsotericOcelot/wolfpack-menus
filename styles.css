@@ -546,3 +546,49 @@ footer p { margin: 0; }
   .comparison-scroll { scroll-snap-type: x proximity; }
   .compare-hall-heading { scroll-snap-align: start; }
 }
+
+.browse-actions { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; }
+.hall-toolbar { padding-block: 5px; row-gap: 2px; }
+.toolbar-field > span, .toolbar-meals legend { margin-bottom: 1px; }
+.browse-actions #food-search { width: min(17rem, 100%); min-width: 0; flex: 0 1 17rem; min-height: 36px; padding: 4px 9px; }
+.browse-actions .view-tabs { flex: none; margin: 0; padding: 2px; }
+.browse-actions .advanced-toggle { flex: none; margin: 0; }
+.weekly-status { align-self: center; }
+.weekly-status summary { cursor: pointer; font-weight: 700; }
+.weekly-status .banner { color: var(--ink); margin: 6px 0 0; }
+.date-section { overflow: clip; }
+#results .station-name, .compare-key {
+  position: sticky; top: var(--toolbar-bottom, 120px); z-index: 3;
+  background: var(--paper); padding-block: 5px;
+}
+.compare-key { padding: 0; }
+.key-clip { overflow: hidden; }
+.compare-key .compare-hall-heading { padding: 5px 10px; }
+.active-category { background: var(--soft-red); padding-inline: 10px; font-weight: 750; font-size: .85rem; }
+.compare-cell .station-context { display: none; }
+@media (max-width: 760px), (orientation: landscape) and (max-height: 500px) {
+  .header-inner { padding-block: 12px; gap: 4px; }
+  .site-header h1 { font-size: 1.6rem; margin: 0; }
+  .site-header .lede, .site-header .eyebrow { display: none; }
+  .browse-actions { gap: 5px; }
+  .browse-actions .view-tab { padding-inline: 7px; }
+  .browse-actions .advanced-toggle { font-size: .74rem; }
+  .hall-toolbar { margin-block: 6px; }
+  .toolbar-meals legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+@media (orientation: landscape) and (max-height: 500px) and (min-width: 600px) {
+  .hall-toolbar { top: 0; grid-template-columns: minmax(100px,1fr) auto minmax(90px,1fr) auto; padding: 3px 8px; gap: 2px 6px; }
+  .hall-toolbar .toolbar-date, .hall-toolbar .toolbar-meals, .hall-toolbar .toolbar-hall, .hall-toolbar .back-to-top { grid-column: auto; grid-row: 1; }
+  .toolbar-field > span, .toolbar-meals legend { margin: 0; }
+  .toolbar-meals .chip-row { gap: 3px; }
+  .toolbar-meals .chip span { min-height: 32px; padding: 5px; }
+  .hall-toolbar select, .browse-actions .view-tab { min-height: 32px; padding-block: 3px; }
+  .comparison-board { width: 100%; }
+  .compare-hall-row, .compare-category-grid { grid-template-columns: repeat(var(--compare-columns), minmax(0,1fr)); }
+  .compare-cell { padding: 5px; overflow-wrap: anywhere; }
+  .compare-cell .food-main, .compare-cell .details-body { padding: 7px; }
+  .compare-cell .food-name-row { flex-wrap: wrap; }
+  .compare-cell .timestamp-list div { display: block; }
+  .compare-cell .macro-row { gap: 3px; }
+  .compare-scroll-cue { display: none; }
+}

@@ -393,7 +393,8 @@ function renderStationBlocks(stations, data) {
     .sort(([left], [right]) => stationGroupRank(left) - stationGroupRank(right) || normalize(left).localeCompare(normalize(right)))
     .map(([station, rows]) => {
       const cards = rows.map(row => foodCard(row, row.nutrition_ref ? data.nutrition[row.nutrition_ref] : null)).join("");
-      return `<section class="station-block"><p class="station-name">${escapeHtml(displayStation(station))}</p><div class="food-grid">${cards}</div></section>`;
+      const context = [LOCATION_LABELS[rows[0].location], stationCategory(station, rows[0].location)];
+      return `<section class="station-block"><p class="station-name"><span class="station-context">${context.map(escapeHtml).join(" · ")} · </span>${escapeHtml(displayStation(station))}</p><div class="food-grid">${cards}</div></section>`;
     }).join("");
 }
 
@@ -461,12 +462,16 @@ function renderCompare(data, state) {
   results.innerHTML = `
     <div class="compare-context"><strong>${escapeHtml(formatDate(state.date))} · ${escapeHtml(meal)}</strong><span>Categories align across the selected dining halls. Original station names remain inside each column.</span></div>
     <p class="compare-scroll-cue">Scroll sideways to compare more dining halls <span aria-hidden="true">→</span></p>
+    <div class="compare-key"><div class="active-category"></div><div class="key-clip"><div class="comparison-board ${columnClass}"><div class="compare-hall-row">${header}</div></div></div></div>
     <div class="comparison-scroll" tabindex="0" aria-label="Dining hall comparison table">
       <div class="comparison-board ${columnClass}">
-        <div class="compare-hall-row">${header}</div>
         ${sections}
       </div>
     </div>`;
+  const scroller = results.querySelector(".comparison-scroll");
+  scroller.addEventListener("scroll", () => {
+    results.querySelector(".key-clip").scrollLeft = scroller.scrollLeft;
+  }, {passive: true});
 }
 
 function renderResults(data, state) {
@@ -551,6 +556,10 @@ function renderPublication(data, now = new Date()) {
   const freshness = document.querySelector("#freshness-card");
   const state = freshnessState(data, now);
   const warnings = data.publication?.warnings || [];
+  const summary = ["Menu status"];
+  if (state.stale) summary.push("Stale data");
+  if (data.publication?.status !== "complete") summary.push(data.publication?.status || "Unknown completeness");
+  document.querySelector("#status-summary").textContent = summary.join(" · ");
   const messages = [];
   if (data.publication?.status !== "complete" || warnings.length) {
     messages.push(`<strong>Published with ${escapeHtml(data.publication?.status || "unknown")} completeness.</strong> ${escapeHtml(warnings.map(item => item.message).join(" ") || "Review the menu availability notes below.")}`);
@@ -651,6 +660,32 @@ function initializeFilters(data, state, now) {
 }
 
 function bindFilters(data, state, nowProvider) {
+  const toolbar = document.querySelector(".hall-toolbar");
+  const updateOffset = () => {
+    const top = parseFloat(getComputedStyle(toolbar).top) || 0;
+    document.documentElement.style.setProperty("--toolbar-bottom", (toolbar.offsetHeight + top) + "px");
+    updateCategory();
+  };
+  function updateCategory() {
+    const key = document.querySelector(".compare-key");
+    if (state.view !== "compare" || !key) return;
+    const edge = key.getBoundingClientRect().bottom + 1;
+    const sections = [...document.querySelectorAll(".compare-category")];
+    const active = sections.find(section => section.getBoundingClientRect().bottom > edge);
+    const label = active?.dataset.category || "";
+    if (key.firstElementChild.textContent !== label) key.firstElementChild.textContent = label;
+  }
+  new ResizeObserver(updateOffset).observe(toolbar);
+  window.addEventListener("scroll", updateCategory, {passive: true});
+  const positions = {browse: 0, compare: null};
+  function switchView(view) {
+    if (view === state.view) return;
+    positions[state.view] = window.scrollY;
+    selectView(state, view);
+    const resultsTop = document.querySelector(".results-section").getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({top: positions[view] ?? Math.min(window.scrollY, resultsTop - toolbar.offsetHeight - 12), behavior: "instant"});
+    updateCategory();
+  }
   const advancedPanel = document.querySelector("#advanced-filters");
   const advancedToggle = document.querySelector("#advanced-toggle");
   const openAdvanced = focusSelector => {
@@ -670,14 +705,15 @@ function bindFilters(data, state, nowProvider) {
     syncHallControls(state);
     syncAdvancedSummary(state);
     renderViews(data, state);
+    updateCategory();
   };
   document.querySelectorAll('[role="tab"]').forEach(tab => {
-    tab.addEventListener("click", () => selectView(state, tab.id === "compare-tab" ? "compare" : "browse"));
+    tab.addEventListener("click", () => switchView(tab.id === "compare-tab" ? "compare" : "browse"));
     tab.addEventListener("keydown", event => {
       if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
       event.preventDefault();
       const view = tab.id === "browse-tab" ? "compare" : "browse";
-      selectView(state, view);
+      switchView(view);
       document.querySelector(`#${view}-tab`).focus();
     });
   });
