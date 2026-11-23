@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#b51f2e">
+  <title>Wolfpack Menu Finder</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Pack Menus">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icon-180.png">
+  <link rel="icon" type="image/png" href="./slobberingwolfncsu.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body id="page-top">
+  <header class="site-header">
+    <div class="header-inner">
+      <div>
+        <p class="eyebrow">NC State dining · local weekly view</p>
+        <h1>Find what’s on the menu.</h1>
+        <p class="lede">Search this week’s published offerings across Fountain, Case, Clark, and One Earth.</p>
+      </div>
+      <div id="freshness-card" class="freshness-card" aria-live="polite">
+        <span class="status-dot loading-dot"></span>
+        <div><strong>Loading weekly menu</strong><span>Please wait…</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section id="publication-banner" class="banner hidden" aria-live="polite"></section>
+
+    <section class="filter-panel" aria-labelledby="filter-heading">
+      <div class="filter-heading-row">
+        <div>
+          <p class="section-kicker">Search scope</p>
+          <h2 id="filter-heading">What are you looking for?</h2>
+        </div>
+        <button id="reset-filters" class="text-button" type="button">Reset filters</button>
+      </div>
+
+      <div class="primary-filters search-only">
+        <label class="field search-field">
+          <span>Food name</span>
+          <span class="input-wrap">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+            <input id="food-search" type="search" placeholder="Try pasta, chicken, apples…" autocomplete="off">
+          </span>
+        </label>
+
+      </div>
+    </section>
+
+    <nav class="hall-toolbar" aria-label="Menu filters">
+      <label class="toolbar-field toolbar-date">
+        <span>Date</span>
+        <select id="date-select" aria-label="Menu date"></select>
+      </label>
+      <fieldset class="toolbar-meals">
+        <legend>Meals</legend>
+        <div id="meal-filters" class="chip-row"></div>
+      </fieldset>
+      <label class="toolbar-field toolbar-hall">
+        <span>Dining hall</span>
+        <select id="hall-select" aria-label="Dining hall"></select>
+      </label>
+      <a class="back-to-top" href="#page-top" aria-label="Back to top" title="Back to top">
+        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 19V5m-6 6 6-6 6 6"/></svg>
+      </a>
+      <button id="advanced-toggle" class="advanced-toggle" type="button" aria-expanded="false" aria-controls="advanced-filters">Advanced filters</button>
+      <small id="advanced-summary" hidden></small>
+    </nav>
+
+    <section id="advanced-filters" class="advanced-filters" aria-labelledby="advanced-panel-heading" hidden>
+      <header class="advanced-panel-header">
+        <h2 id="advanced-panel-heading" tabindex="-1">Advanced filters</h2>
+        <button id="advanced-close" class="advanced-close" type="button">Close</button>
+      </header>
+      <div class="advanced-grid">
+        <fieldset>
+          <legend>Custom dining halls</legend>
+          <p class="filter-help">Choose more than one hall. At least one hall must remain selected.</p>
+          <div id="hall-filters" class="advanced-checks" role="group" aria-label="Custom dining halls"></div>
+        </fieldset>
+        <fieldset>
+          <legend>Group results by</legend>
+          <div id="grouping-filters" class="advanced-checks grouping-filters">
+            <label><input type="radio" name="grouping" value="hall" checked><span>Dining hall</span></label>
+            <label><input type="radio" name="grouping" value="category"><span>Food category</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="category-fieldset">
+          <legend>Food categories</legend>
+          <p class="filter-help">Categories use the source station labels, not food names.</p>
+          <div id="category-filters" class="advanced-checks category-checks"></div>
+        </fieldset>
+      </div>
+    </section>
+
+    <section class="results-section" aria-label="Menu results">
+      <div class="view-tabs" role="tablist" aria-label="Menu view">
+        <button id="browse-tab" class="view-tab" type="button" role="tab" aria-selected="true" aria-controls="browse-view">Browse</button>
+        <button id="compare-tab" class="view-tab" type="button" role="tab" aria-selected="false" aria-controls="compare-view" tabindex="-1">Compare</button>
+      </div>
+      <div id="browse-view" role="tabpanel" aria-labelledby="browse-tab">
+      <div class="results-heading-row">
+        <div>
+          <p class="section-kicker">Published offerings</p>
+          <h2 id="results-heading">Weekly results</h2>
+        </div>
+        <div class="results-meta">
+          <p id="result-count" class="result-count" aria-live="polite"></p>
+          <a id="coverage-jump" class="coverage-jump hidden" href="#coverage-notices">Availability notes <span id="coverage-jump-count"></span></a>
+        </div>
+      </div>
+      <div id="results" class="results" aria-live="polite" aria-busy="true">
+        <div class="empty-state"><strong>Loading menus…</strong><span>Reading the local weekly export.</span></div>
+      </div>
+      </div>
+      <div id="compare-view" role="tabpanel" aria-labelledby="compare-tab" hidden>
+        <div class="results-heading-row compare-heading-row">
+          <div>
+            <p class="section-kicker">Side-by-side menu</p>
+            <h2 id="compare-heading">Compare dining halls</h2>
+          </div>
+          <p id="compare-count" class="result-count" aria-live="polite"></p>
+        </div>
+        <div id="compare-results" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <details id="coverage-notices" class="coverage-notices hidden">
+      <summary id="coverage-heading">
+        <span>Menu availability notes</span>
+        <span id="coverage-summary-count" class="coverage-summary-count"></span>
+      </summary>
+      <div class="coverage-content">
+        <p>These notes come from the source’s published menu coverage.</p>
+        <div id="coverage-list" class="notice-list"></div>
+      </div>
+    </details>
+  </main>
+
+  <footer>
+    <p>Menu data comes from NC State’s published dining menus. Unpublished menus do not necessarily mean a dining hall is closed.</p>
+  </footer>
+
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
