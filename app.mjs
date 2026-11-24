@@ -675,7 +675,7 @@ function bindFilters(data, state, nowProvider) {
   function updateCategory() {
     const key = document.querySelector(".compare-key");
     if (state.view !== "compare" || !key) return;
-    const edge = key.getBoundingClientRect().bottom;
+    const edge = key.querySelector(".key-clip").getBoundingClientRect().bottom;
     const sections = [...document.querySelectorAll(".compare-category")];
     const active = sections.find(section => section.getBoundingClientRect().bottom > edge);
     const label = active && active.querySelector("h3").getBoundingClientRect().bottom <= edge
